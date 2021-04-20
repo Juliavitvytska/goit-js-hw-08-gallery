@@ -1,4 +1,4 @@
-export default [
+const images =  [
     {
       preview:
         'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825__340.jpg',
@@ -63,3 +63,83 @@ export default [
       description: 'Lighthouse Coast Sea',
     },
   ];
+
+const galleryList = document.querySelector('.js-gallery');
+const closeModalButton = document.querySelector('[data-action="close-lightbox"]');
+
+
+
+const imagesList = createImagesList(images);
+galleryList.insertAdjacentHTML('beforeend', imagesList);
+
+
+
+function createImagesList(images){
+  return images.map(({preview, original, description}) =>{
+    return `
+    <li class="gallery__item">
+    <a
+    class="gallery__link"
+        href="${original}"
+        >
+        <img
+          class="gallery__image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+          />
+      </a>
+      </li>
+      `;
+      
+    })
+  .join('');
+}
+
+
+galleryList.addEventListener('click', onImageClick);
+
+function onImageClick(event){
+  const isLightboxImage = event.target.classList.contains('lightbox__image');
+  
+  if(!isLightboxImage){
+    return;
+  }
+  
+  const currentActiveImage = document.querySelector('.lightbox.is-open');
+  
+  if(currentActiveImage){
+    currentActiveImage.classList.remowe('is-open');
+  }
+  
+  const imageElement = event.target;
+  const parentImageElement = imageElement.closest('div.lightbox');
+  
+  parentImageElement.classList.add('is-open');
+  document.body.style.backgroundImage = imageElement.src;
+}
+
+
+const lightbox = document.querySelector('.lightbox');
+
+function onModalClick(event){
+  // event.preventDefault();
+  if(event.target.type === 'IMG') {
+        lightbox.classList.add('is-open');
+        // lightbox.classList.toggle('is-open');
+        lightbox.querySelector('.lightbox__image').src = event.target.src;
+      lightbox.querySelector('.lightbox__image').alt = event.target.alt;
+    }
+}
+galleryList.addEventListener('click', onModalClick);
+
+
+  function onCloseModal(event) {
+    if(event.target.nodeName === "BUTTON") {
+      lightbox.classList.remove('is-open');
+      // lightbox.classList.toggle('is-open');
+    }
+  }
+  
+  closeModalButton.addEventListener('click', onCloseModal);
+
