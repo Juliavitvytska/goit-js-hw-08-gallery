@@ -66,8 +66,8 @@ const images =  [
 
 const galleryList = document.querySelector('.js-gallery');
 const closeModalButton = document.querySelector('[data-action="close-lightbox"]');
-
-
+const image = document.querySelector(".lightbox__image");
+const currentActiveImage = document.querySelector('.lightbox.is-open');
 
 const imagesList = createImagesList(images);
 galleryList.insertAdjacentHTML('beforeend', imagesList);
@@ -91,7 +91,6 @@ function createImagesList(images){
       </a>
       </li>
       `;
-      
     })
   .join('');
 }
@@ -100,23 +99,21 @@ function createImagesList(images){
 galleryList.addEventListener('click', onImageClick);
 
 function onImageClick(event){
+  event.preventDefault();
   const isLightboxImage = event.target.classList.contains('lightbox__image');
   
   if(!isLightboxImage){
     return;
   }
-  
-  const currentActiveImage = document.querySelector('.lightbox.is-open');
-  
+    
   if(currentActiveImage){
     currentActiveImage.classList.remowe('is-open');
   }
   
   const imageElement = event.target;
-  const parentImageElement = imageElement.closest('div.lightbox');
   
-  parentImageElement.classList.add('is-open');
-  document.body.style.backgroundImage = imageElement.src;
+  image.classList.add('is-open');
+  image.style.backgroundImage = imageElement.src;
 }
 
 
