@@ -123,21 +123,23 @@ function onImageClick(event){
 const lightbox = document.querySelector('.lightbox');
 
 function onModalClick(event){
-  // event.preventDefault();
-  if(event.target.type === 'IMG') {
-        lightbox.classList.add('is-open');
-        // lightbox.classList.toggle('is-open');
-        lightbox.querySelector('.lightbox__image').src = event.target.src;
+  event.preventDefault();
+  const clickOnImage = event.target.classList.contains("gallery__image");
+  if(!clickOnImage) {
+    return
+  }
+      lightbox.classList.add('is-open');
+      lightbox.querySelector('.lightbox__image').src = event.target.dataset.source;
       lightbox.querySelector('.lightbox__image').alt = event.target.alt;
-    }
 }
+
 galleryList.addEventListener('click', onModalClick);
 
 
-  function onCloseModal(event) {
-    if(event.target.nodeName === "BUTTON") {
+  function onCloseModal() {
+  const openModal = document.querySelector(".js-lightbox.is-open");
+    if(openModal) {
       lightbox.classList.remove('is-open');
-      // lightbox.classList.toggle('is-open');
     }
   }
   
